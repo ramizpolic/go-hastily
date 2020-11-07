@@ -1,10 +1,18 @@
 package config
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/spf13/viper"
 )
+
+// config struct holds various configuration options.
+type config struct {
+	ApiEndpoint    string `yaml:"api"`
+	LoginEndpoint  string `yaml:"login"`
+	VerifyEndpoint string `yaml:"verify"`
+}
 
 // Provider defines a set of read-only methods for accessing the application
 // configuration params as defined in one of the config files.
@@ -27,32 +35,35 @@ type Provider interface {
 	IsSet(key string) bool
 }
 
-var defaultConfig *viper.Viper
+// LoadConfig returns a configured viper instance
+func LoadConfig() *config {
+	v := readViperConfig("GO-HASTILY")
+	conf := &config{}
 
-// Config returns a default config providers
-func Config() Provider {
-	return defaultConfig
-}
+	if err := v.Unmarshal(conf); err != nil {
+		fmt.Printf("unable to decode into config struct, %v", err)
+	}
 
-// LoadConfigProvider returns a configured viper instance
-func LoadConfigProvider(appName string) Provider {
-	return readViperConfig(appName)
-}
-
-func init() {
-	defaultConfig = readViperConfig("GO-HASTILY")
+	return conf
 }
 
 func readViperConfig(appName string) *viper.Viper {
 	v := viper.New()
 	v.SetEnvPrefix(appName)
 	v.AutomaticEnv()
+	v.SetConfigName("config")
+	v.SetConfigType("yaml")
+	v.AddConfigPath(".")
 
 	// global defaults
-	
 	v.SetDefault("json_logs", false)
 	v.SetDefault("loglevel", "debug")
-	
+
+	// read config
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+	}
 
 	return v
 }

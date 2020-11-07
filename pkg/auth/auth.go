@@ -8,7 +8,12 @@ import (
 	"net/url"
 	"os/user"
 	"strings"
+
+	cfg "github.com/fhivemind/go-hastily/config"
 )
+
+// config loads environment configuration
+var envCfg = cfg.LoadConfig()
 
 // TokenResponse defines token data on authentication request.
 type TokenResponse struct {
@@ -104,7 +109,7 @@ func LoadCredentials() (*Credentials, error) {
 }
 
 // GetCredentials obtains OAuth token required to work with backend API.
-func GetCredentials(endpoint string, username string, password string) (*Credentials, error) {
+func GetCredentials(username string, password string) (*Credentials, error) {
 
 	// create request to obtain oauth token
 	data := url.Values{
@@ -112,7 +117,7 @@ func GetCredentials(endpoint string, username string, password string) (*Credent
 		"username":   {username},
 		"password":   {password},
 	}
-	req, err := http.NewRequest("POST", endpoint, strings.NewReader(data.Encode()))
+	req, err := http.NewRequest("POST", envCfg.LoginEndpoint, strings.NewReader(data.Encode()))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Authorization", "Basic")
@@ -139,7 +144,7 @@ func GetCredentials(endpoint string, username string, password string) (*Credent
 		TokenId:      token.TokenId,
 		Type:         token.Type,
 		Username:     username,
-		Endpoint:     endpoint,
+		Endpoint:     envCfg.LoginEndpoint,
 		Path:         "",
 	}
 

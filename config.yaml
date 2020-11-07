@@ -1,0 +1,4 @@
+# defines backend endpoints
+api: https://reqres.in/api/
+login: https://reqres.in/auth
+verify: https://reqres.in/api/users/me
