@@ -1,0 +1,6 @@
+# golang
+bin
+vendor
+
+# IDEs
+.vscode
