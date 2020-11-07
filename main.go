@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/fhivemind/go-hastily/cmd"
+	// "github.com/fhivemind/go-hastily/cmd"
+	"fmt"
 )
 
 func main() {
-	cmd.Execute()
+	fmt.Printf("Hello")
 }
