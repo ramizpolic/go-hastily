@@ -5,7 +5,6 @@ go 1.14
 require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/hackebrot/go-repr v0.1.0 // indirect
-	github.com/hackebrot/turtle v0.1.0
 	github.com/imdario/mergo v0.3.11
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/jedib0t/go-pretty/v6 v6.0.5
