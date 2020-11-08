@@ -52,6 +52,12 @@ type ResponseList struct {
 	Data map[string]*Response
 }
 
+// User defines user authentication model.
+type User struct {
+	ID    string `json:"id"`
+	Email string `json:"email"`
+}
+
 // ApiClient exposes methods designed to
 // interact with backend for http client.
 type ApiClient interface {
@@ -103,12 +109,6 @@ func (client *Client) CheckConnection() Response {
 	// request form
 	request := Request{
 		URI: envCfg.VerifyEndpoint,
-	}
-
-	// user model
-	type User struct {
-		ID    string `json:"id"`
-		Email string `json:"email"`
 	}
 
 	// check current credentials
